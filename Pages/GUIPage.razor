@@ -1,0 +1,29 @@
+﻿@page "/"
+@using ToDoApi.Services
+@inject IScheduleService ScheduleService
+@using ToDoApi.DataTransferObjects
+
+<h1>Education Classes</h1>
+
+@if (EducationClasses == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+        @foreach (var educationClass in EducationClasses)
+        {
+            <li>@educationClass.Hours hours on day @educationClass.DayId</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<EducationClassCreateDTO> EducationClasses { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        EducationClasses = (await ScheduleService.GetAllEducationClassesAsync()).ToList();
+    }
+}
